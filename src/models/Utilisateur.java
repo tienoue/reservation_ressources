@@ -33,7 +33,8 @@ public class Utilisateur {
     public static List<Utilisateur> getAll() throws SQLException {
         Connection conn = ConnexionBDD.getConnection();
         List<Utilisateur> utilisateurs = new ArrayList<>();
-        PreparedStatement ps = conn.prepareStatement("SELECT * FROM utilisateur");
+        //PreparedStatement ps = conn.prepareStatement("SELECT * FROM utilisateur");
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM utilisateur where role='demandeur'");
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             Utilisateur u = new Utilisateur(

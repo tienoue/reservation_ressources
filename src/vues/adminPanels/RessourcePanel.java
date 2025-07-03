@@ -13,13 +13,12 @@ public class RessourcePanel extends JPanel {
     private DefaultTableModel tableModel;
     private JTextField nomField;
     private JTextField quantiteTotaleField;
-    private JTextField quantiteDisponibleField;
     private JButton ajouterButton, supprimerButton;
 
     public RessourcePanel() {
         setLayout(new BorderLayout());
 
-        tableModel = new DefaultTableModel(new Object[]{"ID", "Nom", "Quantité Totale", "Quantité Disponible"}, 0);
+        tableModel = new DefaultTableModel(new Object[]{"#", "Nom", "Quantité"}, 0);
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
@@ -29,13 +28,9 @@ public class RessourcePanel extends JPanel {
         nomField = new JTextField();
         formPanel.add(nomField);
 
-        formPanel.add(new JLabel("Quantité Totale:"));
+        formPanel.add(new JLabel("Quantité:"));
         quantiteTotaleField = new JTextField();
         formPanel.add(quantiteTotaleField);
-
-        formPanel.add(new JLabel("Quantité Disponible:"));
-        quantiteDisponibleField = new JTextField();
-        formPanel.add(quantiteDisponibleField);
 
         ajouterButton = new JButton("Ajouter Ressource");
         supprimerButton = new JButton("Supprimer Ressource");
@@ -54,8 +49,9 @@ public class RessourcePanel extends JPanel {
         try {
             tableModel.setRowCount(0);
             List<Ressource> ressources = Ressource.getAll();
+            int position = 1;
             for (Ressource r : ressources) {
-                tableModel.addRow(new Object[]{r.getId(), r.getNom(), r.getQuantiteTotale(), r.getQuantiteDisponible()});
+                tableModel.addRow(new Object[]{position++, r.getNom(), r.getQuantiteTotale()});
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur de chargement: " + e.getMessage());
@@ -65,9 +61,8 @@ public class RessourcePanel extends JPanel {
     private void ajouterRessource() {
         String nom = nomField.getText();
         String quantiteTotaleText = quantiteTotaleField.getText();
-        String quantiteDisponibleText = quantiteDisponibleField.getText();
 
-        if (nom.isEmpty() || quantiteTotaleText.isEmpty() || quantiteDisponibleText.isEmpty()) {
+        if (nom.isEmpty() || quantiteTotaleText.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.");
             return;
         }
@@ -75,7 +70,6 @@ public class RessourcePanel extends JPanel {
         int quantiteTotale, quantiteDisponible;
         try {
             quantiteTotale = Integer.parseInt(quantiteTotaleText);
-            quantiteDisponible = Integer.parseInt(quantiteDisponibleText);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Veuillez entrer des nombres valides pour les quantités.");
             return;
@@ -84,13 +78,12 @@ public class RessourcePanel extends JPanel {
         Ressource r = new Ressource();
         r.setNom(nom);
         r.setQuantiteTotale(quantiteTotale);
-        r.setQuantiteDisponible(quantiteDisponible);
+        r.setQuantiteDisponible(quantiteTotale);
         try {
             r.add();
             chargerRessources();
             nomField.setText("");
             quantiteTotaleField.setText("");
-            quantiteDisponibleField.setText("");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout: " + e.getMessage());
         }
@@ -102,10 +95,10 @@ public class RessourcePanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ressource à supprimer.");
             return;
         }
-        int id = (int) tableModel.getValueAt(selectedRow, 0);
-        Ressource r = new Ressource();
-        r.setId(id);
+
         try {
+            List<Ressource> ressources = Ressource.getAll();
+            Ressource r = ressources.get(selectedRow);
             r.delete();
             chargerRessources();
         } catch (SQLException e) {

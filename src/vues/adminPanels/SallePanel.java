@@ -19,7 +19,7 @@ public class SallePanel extends JPanel {
     public SallePanel() {
         setLayout(new BorderLayout());
 
-        tableModel = new DefaultTableModel(new Object[]{"ID", "Nom", "Capacité", "Type"}, 0);
+        tableModel = new DefaultTableModel(new Object[]{"#", "Nom", "Capacité", "Type"}, 0);
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
@@ -54,8 +54,9 @@ public class SallePanel extends JPanel {
         try {
             tableModel.setRowCount(0);
             List<Salle> salles = Salle.getAll();
+            int position = 1;
             for (Salle s : salles) {
-                tableModel.addRow(new Object[]{s.getId(), s.getNom(), s.getCapacite(), s.getType()});
+                tableModel.addRow(new Object[]{position++, s.getNom(), s.getCapacite(), s.getType()});
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur de chargement: " + e.getMessage());
@@ -101,10 +102,10 @@ public class SallePanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Veuillez sélectionner une salle à supprimer.");
             return;
         }
-        int id = (int) tableModel.getValueAt(selectedRow, 0);
-        Salle s = new Salle();
-        s.setId(id);
+
         try {
+            List<Salle> salles = Salle.getAll();
+            Salle s = salles.get(selectedRow);
             s.delete();
             chargerSalles();
         } catch (SQLException e) {

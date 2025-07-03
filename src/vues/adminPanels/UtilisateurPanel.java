@@ -12,35 +12,28 @@ public class UtilisateurPanel extends JPanel {
     private JTable table;
     private DefaultTableModel tableModel;
     private JTextField nomField;
-    private JTextField passwordField;
-    private JComboBox<String> roleBox;
     private JButton ajouterButton, supprimerButton;
 
     public UtilisateurPanel() {
         setLayout(new BorderLayout());
 
-        tableModel = new DefaultTableModel(new Object[]{"ID", "Nom", "Role"}, 0);
+        tableModel = new DefaultTableModel(new Object[]{"#", "Nom"}, 0);
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        JPanel formPanel = new JPanel(new GridLayout(4, 2));
+        JPanel formPanel = new JPanel(new GridLayout(3, 2));
         formPanel.add(new JLabel("Nom:"));
         nomField = new JTextField();
         formPanel.add(nomField);
 
         formPanel.add(new JLabel("Mot de passe:"));
-        passwordField = new JTextField();
-        formPanel.add(passwordField);
-
-        formPanel.add(new JLabel("Role:"));
-        roleBox = new JComboBox<>(new String[]{"demandeur", "responsable"});
-        formPanel.add(roleBox);
+        formPanel.add(new JLabel("Le mot de passe par défaut est 00000000"));
 
         ajouterButton = new JButton("Ajouter Demandeur");
         supprimerButton = new JButton("Supprimer");
-        formPanel.add(ajouterButton);
         formPanel.add(supprimerButton);
+        formPanel.add(ajouterButton);
 
         add(formPanel, BorderLayout.SOUTH);
 
@@ -54,8 +47,9 @@ public class UtilisateurPanel extends JPanel {
         try {
             tableModel.setRowCount(0);
             List<Utilisateur> utilisateurs = Utilisateur.getAll();
+            int position = 1;
             for (Utilisateur u : utilisateurs) {
-                tableModel.addRow(new Object[]{u.getId(), u.getNom(), u.getRole()});
+                tableModel.addRow(new Object[]{position++, u.getNom()});
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur de chargement: " + e.getMessage());
@@ -64,8 +58,8 @@ public class UtilisateurPanel extends JPanel {
 
     private void ajouterUtilisateur() {
         String nom = nomField.getText();
-        String password = passwordField.getText();
-        String role = roleBox.getSelectedItem().toString();
+        String password = "00000000";
+        String role = "demandeur";
 
         if (nom.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.");
@@ -80,7 +74,6 @@ public class UtilisateurPanel extends JPanel {
             u.add();
             chargerUtilisateurs();
             nomField.setText("");
-            passwordField.setText("");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout: " + e.getMessage());
         }
@@ -92,15 +85,11 @@ public class UtilisateurPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Veuillez sélectionner un utilisateur à supprimer.");
             return;
         }
-        int id = (int) tableModel.getValueAt(selectedRow, 0);
-        String role = (String) tableModel.getValueAt(selectedRow, 2);
-        if (!role.equals("demandeur")) {
-            JOptionPane.showMessageDialog(this, "Vous ne pouvez supprimer que les demandeurs.");
-            return;
-        }
-        Utilisateur u = new Utilisateur();
-        u.setId(id);
+
+
         try {
+            List<Utilisateur> utilisateurs = Utilisateur.getAll();
+            Utilisateur u = utilisateurs.get(selectedRow);
             u.delete();
             chargerUtilisateurs();
         } catch (SQLException e) {
