@@ -37,17 +37,18 @@ public class LoginController {
 
                         switch (role) {
                             case "admin":
-                                new AdminDashboardView();
+                                new AdminDashboardView(idUtilisateur);
                                 break;
                             case "demandeur":
-                                new DemandeurDashboardView();
+                                new DemandeurDashboardView(idUtilisateur);
                                 break;
                             case "responsable":
-                                new ResponsableDashboardView();
+                                new ResponsableDashboardView(idUtilisateur);
                                 break;
                             default:
                                 JOptionPane.showMessageDialog(view, "Rôle non reconnu.");
                         }
+
                     } else {
                         JOptionPane.showMessageDialog(view, "Nom ou mot de passe incorrect.");
                     }

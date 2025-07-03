@@ -7,8 +7,10 @@ import vues.adminPanels.UtilisateurPanel;
 import javax.swing.*;
 import java.awt.*;
 public class AdminDashboardView extends JFrame {
+    private int utilisateurId;
     private JPanel contentPanel;
-    public AdminDashboardView() {
+    public AdminDashboardView(int utilisateurId) {
+        this.utilisateurId = utilisateurId;
         setTitle("Admin Dashboard - Gestion de réservation");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 500);
@@ -22,6 +24,7 @@ public class AdminDashboardView extends JFrame {
         JButton utilisateurBtn = new JButton("Utilisateurs");
         JButton salleBtn = new JButton("Salles");
         JButton ressourceBtn = new JButton("Ressources");
+        JButton btnModifierInfos = new JButton("Modifier mes infos");
 
         Dimension btnSize = new Dimension(180, 30);
         utilisateurBtn.setMaximumSize(btnSize);
@@ -45,6 +48,7 @@ public class AdminDashboardView extends JFrame {
         menuPanel.add(salleBtn);
         menuPanel.add(Box.createVerticalStrut(10)); // espace entre boutons
         menuPanel.add(ressourceBtn);
+        menuPanel.add(btnModifierInfos);
 
 
         contentPanel = new JPanel(new BorderLayout());
@@ -57,6 +61,7 @@ public class AdminDashboardView extends JFrame {
         utilisateurBtn.addActionListener(e -> afficherUtilisateurPanel());
         salleBtn.addActionListener(e -> afficherSallePanel());
         ressourceBtn.addActionListener(e -> afficherRessourcePanel());
+        btnModifierInfos.addActionListener(e -> ModifierInfoDialog.afficher(utilisateurId));
 
         setVisible(true);
     }

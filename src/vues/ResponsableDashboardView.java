@@ -139,8 +139,10 @@ public class ResponsableDashboardView extends JFrame {
     private JPanel contentPanel;
     private CalendrierPanel calendrierPanel;
     private HistoriquePanel historiquePanel;
+    private int utilisateurId;
 
-    public ResponsableDashboardView() {
+    public ResponsableDashboardView(int utilisateurId) {
+        this.utilisateurId = utilisateurId;
         setTitle("Responsable Dashboard - Gestion de réservation");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 500);
@@ -162,6 +164,9 @@ public class ResponsableDashboardView extends JFrame {
         JButton calendrierBtn = new JButton("Calendrier");
         JButton ressourcesBtn = new JButton("Afficher Ressources");
 
+        JButton btnModifierInfos = new JButton("Modifier mes infos");
+        btnModifierInfos.addActionListener(e -> ModifierInfoDialog.afficher(utilisateurId));
+
         // Configuration des boutons
         historiqueBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         calendrierBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -178,6 +183,7 @@ public class ResponsableDashboardView extends JFrame {
         menuPanel.add(calendrierBtn);
         menuPanel.add(Box.createVerticalStrut(10));
         menuPanel.add(historiqueBtn);
+        menuPanel.add(btnModifierInfos);
 
 
 
