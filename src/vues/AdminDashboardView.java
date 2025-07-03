@@ -51,7 +51,7 @@ public class AdminDashboardView extends JFrame {
     }
     private void afficherRessourcePanel() {
         contentPanel.removeAll();
-        //contentPanel.add(new RessourcePanel());
+        contentPanel.add(new RessourcePanel());
         contentPanel.revalidate();
         contentPanel.repaint();
     }
