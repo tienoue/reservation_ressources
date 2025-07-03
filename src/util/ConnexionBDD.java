@@ -92,6 +92,8 @@ public class ConnexionBDD {
         insertSalles(conn);
         insertRessources(conn);
         insertUtilisateurs(conn);
+        insertReservations(conn);
+        insertReservationRessources(conn);
     }
 
     private static void insertSalles(Connection conn) throws SQLException {
@@ -162,5 +164,126 @@ public class ConnexionBDD {
         }
     }
 
+    private static void insertReservations(Connection conn) throws SQLException {
+        String sql = "INSERT INTO reservation (id_utilisateur, id_salle, date, heure_debut, heure_fin, etat) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            // Réservations validées par des demandeurs
+            stmt.setInt(1, 2); // Alice Martine (demandeur)
+            stmt.setInt(2, 1); // Salle ID
+            stmt.setDate(3, Date.valueOf("2025-02-10")); // Date
+            stmt.setTime(4, Time.valueOf("10:00:00")); // Heure début
+            stmt.setTime(5, Time.valueOf("12:00:00")); // Heure fin
+            stmt.setString(6, "validee");
+            stmt.executeUpdate();
+
+            // Réservations validées par des demandeurs
+            stmt.setInt(1, 2); // Alice Martine (demandeur)
+            stmt.setInt(2, 1); // Salle ID
+            stmt.setDate(3, Date.valueOf("2025-02-10")); // Date
+            stmt.setTime(4, Time.valueOf("08:00:00")); // Heure début
+            stmt.setTime(5, Time.valueOf("10:00:00")); // Heure fin
+            stmt.setString(6, "validee");
+            stmt.executeUpdate();
+
+            // Réservations validées par des demandeurs
+            stmt.setInt(1, 2); // Alice Martine (demandeur)
+            stmt.setInt(2, 1); // Salle ID
+            stmt.setDate(3, Date.valueOf("2025-02-10")); // Date
+            stmt.setTime(4, Time.valueOf("12:00:00")); // Heure début
+            stmt.setTime(5, Time.valueOf("14:00:00")); // Heure fin
+            stmt.setString(6, "validee");
+            stmt.executeUpdate();
+
+            stmt.setInt(1, 2); // Alice Martine
+            stmt.setInt(2, 1); // Salle ID
+            stmt.setDate(3, Date.valueOf("2025-07-01")); // Date
+            stmt.setTime(4, Time.valueOf("09:00:00")); // Heure début
+            stmt.setTime(5, Time.valueOf("11:00:00")); // Heure fin
+            stmt.setString(6, "validee");
+            stmt.executeUpdate();
+
+            stmt.setInt(1, 3);
+            stmt.setInt(2, 2); // Salle ID
+            stmt.setDate(3, Date.valueOf("2025-07-01")); // Date
+            stmt.setTime(4, Time.valueOf("12:00:00")); // Heure début
+            stmt.setTime(5, Time.valueOf("14:00:00")); // Heure fin
+            stmt.setString(6, "validee");
+            stmt.executeUpdate();
+
+            stmt.setInt(1, 3); // Bob Dupont
+            stmt.setInt(2, 2); // Salle ID
+            stmt.setDate(3, Date.valueOf("2025-07-11"));
+            stmt.setTime(4, Time.valueOf("14:00:00"));
+            stmt.setTime(5, Time.valueOf("16:00:00"));
+            stmt.setString(6, "validee");
+            stmt.executeUpdate();
+
+            // Réservations en attente
+            stmt.setInt(1, 3); // Bob Dupont
+            stmt.setInt(2, 1); // Salle ID
+            stmt.setDate(3, Date.valueOf("2025-07-12"));
+            stmt.setTime(4, Time.valueOf("09:00:00"));
+            stmt.setTime(5, Time.valueOf("11:00:00"));
+            stmt.setString(6, "en attente");
+            stmt.executeUpdate();
+
+            // Plus de réservations par demandeurs
+            stmt.setInt(1, 2); // Alice Martine
+            stmt.setInt(2, 2); // Salle ID
+            stmt.setDate(3, Date.valueOf("2025-07-13"));
+            stmt.setTime(4, Time.valueOf("13:00:00"));
+            stmt.setTime(5, Time.valueOf("15:00:00"));
+            stmt.setString(6, "validee");
+            stmt.executeUpdate();
+
+            stmt.setInt(1, 3); // Bob Dupont
+            stmt.setInt(2, 3); // Salle ID
+            stmt.setDate(3, Date.valueOf("2025-07-14"));
+            stmt.setTime(4, Time.valueOf("10:00:00"));
+            stmt.setTime(5, Time.valueOf("12:00:00"));
+            stmt.setString(6, "validee");
+            stmt.executeUpdate();
+        }
+    }
+
+    private static void insertReservationRessources(Connection conn) throws SQLException {
+        String sql = "INSERT INTO reservation_ressource (id_reservation, id_ressource, quantite) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // Insérez des ressources pour la réservation ID 1 (réservation d'Alice)
+            stmt.setInt(1, 1); // ID de réservation
+            stmt.setInt(2, 1); // ID de ressource (Vidéoprojecteur)
+            stmt.setInt(3, 1); // Quantité
+            stmt.executeUpdate();
+
+            stmt.setInt(1, 1);
+            stmt.setInt(2, 2); // ID de ressource (PC Portable)
+            stmt.setInt(3, 2);
+            stmt.executeUpdate();
+
+            // Insérez des ressources pour la réservation ID 2 (réservation d'Alice)
+            stmt.setInt(1, 2); // ID de réservation
+            stmt.setInt(2, 3); // ID de ressource (Tableau Interactif)
+            stmt.setInt(3, 1);
+            stmt.executeUpdate();
+
+            // Insérez des ressources pour la réservation ID 3 (réservation de Bob)
+            stmt.setInt(1, 3); // ID de réservation
+            stmt.setInt(2, 1); // ID de ressource (Vidéoprojecteur)
+            stmt.setInt(3, 1); // Quantité
+            stmt.executeUpdate();
+
+            // Insérez des ressources pour la réservation ID 3 (réservation de Bob)
+            stmt.setInt(1, 3); // ID de réservation
+            stmt.setInt(2, 2); // ID de ressource (Vidéoprojecteur)
+            stmt.setInt(3, 1); // Quantité
+            stmt.executeUpdate();
+
+            // Ajoutez d'autres ressources si nécessaire
+            stmt.setInt(1, 4); // ID de réservation (en attente de Bob)
+            stmt.setInt(2, 2); // ID de ressource (PC Portable)
+            stmt.setInt(3, 1);
+            stmt.executeUpdate();
+        }
+    }
 }

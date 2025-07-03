@@ -16,7 +16,7 @@ public class LoginController {
                 String password = new String(view.passwordField.getPassword());
                 try {
                     Connection conn = ConnexionBDD.getConnection();
-                    PreparedStatement ps = conn.prepareStatement("SELECT * FROM utilisateur WHERE nom=? AND password=? AND role='admin'");
+                    PreparedStatement ps = conn.prepareStatement("SELECT * FROM utilisateur WHERE nom=? AND password=? AND role='responsable'");
                     ps.setString(1, nom);
                     ps.setString(2, password);
                     ResultSet rs = ps.executeQuery();
