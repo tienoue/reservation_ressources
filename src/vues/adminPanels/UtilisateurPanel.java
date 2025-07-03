@@ -22,18 +22,18 @@ public class UtilisateurPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        JPanel formPanel = new JPanel(new GridLayout(3, 2));
+        ajouterButton = new JButton("Ajouter Demandeur");
+        supprimerButton = new JButton("Supprimer");
+
+        JPanel formPanel = new JPanel(new GridLayout(2, 3));
         formPanel.add(new JLabel("Nom:"));
         nomField = new JTextField();
         formPanel.add(nomField);
+        formPanel.add(ajouterButton);
 
         formPanel.add(new JLabel("Mot de passe:"));
-        formPanel.add(new JLabel("Le mot de passe par défaut est 00000000"));
-
-        ajouterButton = new JButton("Ajouter Demandeur");
-        supprimerButton = new JButton("Supprimer");
+        formPanel.add(new JLabel("00000000"));
         formPanel.add(supprimerButton);
-        formPanel.add(ajouterButton);
 
         add(formPanel, BorderLayout.SOUTH);
 

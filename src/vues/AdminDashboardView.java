@@ -15,13 +15,37 @@ public class AdminDashboardView extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new GridLayout(3, 1, 10, 10));
-        JButton utilisateurBtn = new JButton("Utilisateur");
-        JButton salleBtn = new JButton("Salle");
+        menuPanel.setBackground(new Color(20, 20, 255));
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS)); // pour aligner verticalement ses enfants
+        menuPanel.setPreferredSize(new Dimension(200, getHeight())); // force la largeur à gauche
+
+        JButton utilisateurBtn = new JButton("Utilisateurs");
+        JButton salleBtn = new JButton("Salles");
         JButton ressourceBtn = new JButton("Ressources");
+
+        Dimension btnSize = new Dimension(180, 30);
+        utilisateurBtn.setMaximumSize(btnSize);
+        salleBtn.setMaximumSize(btnSize);
+        ressourceBtn.setMaximumSize(btnSize);
+
+        utilisateurBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        salleBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        ressourceBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel labelAdmin = new JLabel("Administrateur");
+        labelAdmin.setForeground(new Color(255, 255, 255));
+        labelAdmin.setFont(labelAdmin.getFont().deriveFont(20f)); //augmenter la police
+        labelAdmin.setAlignmentX(Component.CENTER_ALIGNMENT); // centrage dans le BoxLayout
+
+        menuPanel.add(Box.createVerticalStrut(20)); // espace entre boutons
+        menuPanel.add(labelAdmin);
+        menuPanel.add(Box.createVerticalStrut(40)); // espace entre boutons
         menuPanel.add(utilisateurBtn);
+        menuPanel.add(Box.createVerticalStrut(10)); // espace entre boutons
         menuPanel.add(salleBtn);
+        menuPanel.add(Box.createVerticalStrut(10)); // espace entre boutons
         menuPanel.add(ressourceBtn);
+
 
         contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(new JLabel("Bienvenue dans le dashboard administrateur", SwingConstants.CENTER), BorderLayout.CENTER);

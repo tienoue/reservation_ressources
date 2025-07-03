@@ -13,7 +13,7 @@ public class RessourcePanel extends JPanel {
     private DefaultTableModel tableModel;
     private JTextField nomField;
     private JTextField quantiteTotaleField;
-    private JButton ajouterButton, supprimerButton;
+    private JButton ajouterButton, supprimerButton, modifierButton;
 
     public RessourcePanel() {
         setLayout(new BorderLayout());
@@ -23,19 +23,27 @@ public class RessourcePanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        JPanel formPanel = new JPanel(new GridLayout(4, 2));
+        ajouterButton = new JButton("Ajouter Ressource");
+        supprimerButton = new JButton("Supprimer Ressource");
+        modifierButton = new JButton("Modifier Ressource");
+
+        JPanel formPanel = new JPanel(new GridLayout(3, 3));
         formPanel.add(new JLabel("Nom:"));
         nomField = new JTextField();
         formPanel.add(nomField);
+        formPanel.add(ajouterButton);
 
         formPanel.add(new JLabel("Quantité:"));
         quantiteTotaleField = new JTextField();
         formPanel.add(quantiteTotaleField);
+        formPanel.add(modifierButton);
 
-        ajouterButton = new JButton("Ajouter Ressource");
-        supprimerButton = new JButton("Supprimer Ressource");
-        formPanel.add(ajouterButton);
+
+        formPanel.add(new JLabel());
+        formPanel.add(new JLabel());
         formPanel.add(supprimerButton);
+
+
 
         add(formPanel, BorderLayout.SOUTH);
 
@@ -43,6 +51,23 @@ public class RessourcePanel extends JPanel {
 
         ajouterButton.addActionListener(e -> ajouterRessource());
         supprimerButton.addActionListener(e -> supprimerRessource());
+        modifierButton.addActionListener(e -> modifierRessource());
+
+        table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    try {
+                        List<Ressource> ressources = Ressource.getAll();
+                        Ressource r = ressources.get(selectedRow);
+                        nomField.setText(r.getNom());
+                        quantiteTotaleField.setText(String.valueOf(r.getQuantiteTotale()));
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Erreur lors du chargement: " + ex.getMessage());
+                    }
+                }
+            }
+        });
     }
 
     private void chargerRessources() {
@@ -67,11 +92,11 @@ public class RessourcePanel extends JPanel {
             return;
         }
 
-        int quantiteTotale, quantiteDisponible;
+        int quantiteTotale;
         try {
             quantiteTotale = Integer.parseInt(quantiteTotaleText);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Veuillez entrer des nombres valides pour les quantités.");
+            JOptionPane.showMessageDialog(this, "Veuillez entrer un nombre valide pour la quantité.");
             return;
         }
 
@@ -103,6 +128,44 @@ public class RessourcePanel extends JPanel {
             chargerRessources();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur lors de la suppression: " + e.getMessage());
+        }
+    }
+
+    private void modifierRessource() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ressource à modifier.");
+            return;
+        }
+
+        String nom = nomField.getText();
+        String quantiteTotaleText = quantiteTotaleField.getText();
+
+        if (nom.isEmpty() || quantiteTotaleText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs pour la modification.");
+            return;
+        }
+
+        int quantiteTotale;
+        try {
+            quantiteTotale = Integer.parseInt(quantiteTotaleText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Veuillez entrer un nombre valide pour la quantité.");
+            return;
+        }
+
+        try {
+            List<Ressource> ressources = Ressource.getAll();
+            Ressource r = ressources.get(selectedRow);
+            r.setNom(nom);
+            r.setQuantiteTotale(quantiteTotale);
+            r.setQuantiteDisponible(quantiteTotale);
+            r.update();
+            chargerRessources();
+            nomField.setText("");
+            quantiteTotaleField.setText("");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erreur lors de la modification: " + e.getMessage());
         }
     }
 }
