@@ -39,19 +39,19 @@ public class AdminDashboardView extends JFrame {
 
     private void afficherUtilisateurPanel() {
         contentPanel.removeAll();
-        //contentPanel.add(new UtilisateurPanel());
+        contentPanel.add(new UtilisateurPanel());
         contentPanel.revalidate();
         contentPanel.repaint();
     }
     private void afficherSallePanel() {
         contentPanel.removeAll();
-        //contentPanel.add(new SallePanel());
+        contentPanel.add(new SallePanel());
         contentPanel.revalidate();
         contentPanel.repaint();
     }
     private void afficherRessourcePanel() {
         contentPanel.removeAll();
-        //contentPanel.add(new RessourcePanel());
+        contentPanel.add(new RessourcePanel());
         contentPanel.revalidate();
         contentPanel.repaint();
     }
