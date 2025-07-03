@@ -121,11 +121,26 @@ public class RessourcePanel extends JPanel {
             return;
         }
 
+        // ✅ Ajout de la boîte de confirmation
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Êtes-vous sûr de vouloir supprimer cette ressource ?",
+                "Confirmation de suppression",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return; // si l'utilisateur choisit 'Non', on arrête la suppression
+        }
+
         try {
             List<Ressource> ressources = Ressource.getAll();
             Ressource r = ressources.get(selectedRow);
             r.delete();
             chargerRessources();
+
+            nomField.setText("");
+            quantiteTotaleField.setText("");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur lors de la suppression: " + e.getMessage());
         }

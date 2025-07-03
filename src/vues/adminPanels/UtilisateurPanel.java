@@ -86,6 +86,17 @@ public class UtilisateurPanel extends JPanel {
             return;
         }
 
+        // ✅ Ajout de la boîte de confirmation
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
+                "Confirmation de suppression",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return; // si l'utilisateur choisit 'Non', on arrête la suppression
+        }
 
         try {
             List<Utilisateur> utilisateurs = Utilisateur.getAll();

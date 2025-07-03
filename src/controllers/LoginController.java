@@ -55,6 +55,7 @@ public class LoginController {
 
                 } catch (SQLException ex) {
                     ex.printStackTrace();
+                    JOptionPane.showMessageDialog(view, "Erreur: Veuillez vérifier votre connexion à MySql.");
                 }
             }
         });

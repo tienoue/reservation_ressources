@@ -1,5 +1,6 @@
 package vues;
 
+import controllers.LoginController;
 import vues.adminPanels.RessourcePanel;
 import vues.adminPanels.SallePanel;
 import vues.adminPanels.UtilisateurPanel;
@@ -25,15 +26,20 @@ public class AdminDashboardView extends JFrame {
         JButton salleBtn = new JButton("Salles");
         JButton ressourceBtn = new JButton("Ressources");
         JButton btnModifierInfos = new JButton("Modifier mes infos");
+        JButton btnDeconnexion = new JButton("Deconnexion");
 
         Dimension btnSize = new Dimension(180, 30);
         utilisateurBtn.setMaximumSize(btnSize);
         salleBtn.setMaximumSize(btnSize);
         ressourceBtn.setMaximumSize(btnSize);
+        btnModifierInfos.setMaximumSize(btnSize);
+        btnDeconnexion.setMaximumSize(btnSize);
 
         utilisateurBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         salleBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         ressourceBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnModifierInfos.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnDeconnexion.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel labelAdmin = new JLabel("Administrateur");
         labelAdmin.setForeground(new Color(255, 255, 255));
@@ -48,7 +54,10 @@ public class AdminDashboardView extends JFrame {
         menuPanel.add(salleBtn);
         menuPanel.add(Box.createVerticalStrut(10)); // espace entre boutons
         menuPanel.add(ressourceBtn);
+        menuPanel.add(Box.createVerticalStrut(10)); // espace entre boutons
         menuPanel.add(btnModifierInfos);
+        menuPanel.add(Box.createVerticalStrut(10)); // espace entre boutons
+        menuPanel.add(btnDeconnexion);
 
 
         contentPanel = new JPanel(new BorderLayout());
@@ -62,6 +71,7 @@ public class AdminDashboardView extends JFrame {
         salleBtn.addActionListener(e -> afficherSallePanel());
         ressourceBtn.addActionListener(e -> afficherRessourcePanel());
         btnModifierInfos.addActionListener(e -> ModifierInfoDialog.afficher(utilisateurId));
+        btnDeconnexion.addActionListener(e -> deconnecter());
 
         setVisible(true);
     }
@@ -83,5 +93,24 @@ public class AdminDashboardView extends JFrame {
         contentPanel.add(new RessourcePanel());
         contentPanel.revalidate();
         contentPanel.repaint();
+    }
+    private void deconnecter() {
+        // ✅ Ajout de la boîte de confirmation
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Êtes-vous sûr de vouloir vous déconnecter ?",
+                "Confirmation de déconnexion",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return; // si l'utilisateur choisit 'Non', on arrête la suppression
+        }
+
+        this.dispose();
+
+        LoginView view = new LoginView();
+        view.setVisible(true);
+        new LoginController(view);
     }
 }

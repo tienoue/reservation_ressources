@@ -67,23 +67,30 @@ public class ConnexionBDD {
                 "    role ENUM('admin', 'responsable', 'demandeur') NOT NULL\n" +
                 ")");
 
-        stmt.executeUpdate("CREATE TABLE reservation (" +
-                "id INT AUTO_INCREMENT PRIMARY KEY," +
-                "id_utilisateur INT," +
-                "id_salle INT," +
-                "date DATE," +
-                "heure_debut TIME," +
-                "heure_fin TIME," +
-                "etat ENUM('en attente', 'validee', 'rejetee')," +
-                "FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id)," +
-                "FOREIGN KEY (id_salle) REFERENCES salle(id))");
+        stmt.executeUpdate("CREATE TABLE `reservation` (\n" +
+                "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                "  `id_utilisateur` int(11) DEFAULT NULL,\n" +
+                "  `id_salle` int(11) DEFAULT NULL,\n" +
+                "  `date` date DEFAULT NULL,\n" +
+                "  `heure_debut` time DEFAULT NULL,\n" +
+                "  `heure_fin` time DEFAULT NULL,\n" +
+                "  `etat` enum('en attente','validee','rejetee') DEFAULT NULL,\n" +
+                "  PRIMARY KEY (`id`),\n" +
+                "  KEY `reservation_ibfk_1` (`id_utilisateur`),\n" +
+                "  KEY `reservation_ibfk_2` (`id_salle`),\n" +
+                "  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "  CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`id_salle`) REFERENCES `salle` (`id`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
+                ") ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci\n");
 
-        stmt.executeUpdate("CREATE TABLE reservation_ressource (" +
-                "id_reservation INT," +
-                "id_ressource INT," +
-                "quantite INT," +
-                "FOREIGN KEY (id_reservation) REFERENCES reservation(id)," +
-                "FOREIGN KEY (id_ressource) REFERENCES ressource(id))");
+        stmt.executeUpdate("CREATE TABLE `reservation_ressource` (\n" +
+                "  `id_reservation` int(11) DEFAULT NULL,\n" +
+                "  `id_ressource` int(11) DEFAULT NULL,\n" +
+                "  `quantite` int(11) DEFAULT NULL,\n" +
+                "  KEY `reservation_ressource_ibfk_1` (`id_reservation`),\n" +
+                "  KEY `reservation_ressource_ibfk_2` (`id_ressource`),\n" +
+                "  CONSTRAINT `reservation_ressource_ibfk_1` FOREIGN KEY (`id_reservation`) REFERENCES `reservation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "  CONSTRAINT `reservation_ressource_ibfk_2` FOREIGN KEY (`id_ressource`) REFERENCES `ressource` (`id`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci\n");
     }
 
     private static void populateDatabase(Connection conn) throws SQLException {
@@ -108,7 +115,7 @@ public class ConnexionBDD {
             stmt.executeUpdate();
 
             stmt.setString(1, "Salle 205");
-            stmt.setInt(2, 50);
+            stmt.setInt(2, 5);
             stmt.setString(3, "Labo");
             stmt.executeUpdate();
         }
@@ -122,7 +129,7 @@ public class ConnexionBDD {
             stmt.setInt(3, 5); // Tout disponible initialement
             stmt.executeUpdate();
 
-            stmt.setString(1, "PC Portable");
+            stmt.setString(1, "PC Desktop");
             stmt.setInt(2, 10);
             stmt.setInt(3, 10);
             stmt.executeUpdate();
@@ -139,25 +146,20 @@ public class ConnexionBDD {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             // Ajout de l'administrateur
             stmt.setString(1, "Admin");
-            stmt.setString(2, "admin"); // mot de passe provisoire
+            stmt.setString(2, "admin123"); // mot de passe provisoire
             stmt.setString(3, "admin");
             stmt.executeUpdate();
 
-            // Ajout de demandeurs
-            stmt.setString(1, "Alice Martine");
-            stmt.setString(2, "demandeur");
-            stmt.setString(3, "demandeur");
-            stmt.executeUpdate();
-
-            stmt.setString(1, "Bob Dupont");
-            stmt.setString(2, "demandeur");
-            stmt.setString(3, "demandeur");
-            stmt.executeUpdate();
-
             // Ajout du responsable
-            stmt.setString(1, "Charlie Petit");
+            stmt.setString(1, "Ngono Charlie");
             stmt.setString(2, "responsable");
             stmt.setString(3, "responsable");
+            stmt.executeUpdate();
+
+            // Ajout de demandeur
+            stmt.setString(1, "Seben Martin");
+            stmt.setString(2, "00000000");
+            stmt.setString(3, "demandeur");
             stmt.executeUpdate();
         }
     }

@@ -126,11 +126,27 @@ public class SallePanel extends JPanel {
             return;
         }
 
+        // ✅ Ajout de la boîte de confirmation
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Êtes-vous sûr de vouloir supprimer cette salle ?",
+                "Confirmation de suppression",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return; // si l'utilisateur choisit 'Non', on arrête la suppression
+        }
+
         try {
             List<Salle> salles = Salle.getAll();
             Salle s = salles.get(selectedRow);
             s.delete();
             chargerSalles();
+
+            nomField.setText("");
+            capaciteField.setText("");
+            typeField.setText("");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur lors de la suppression: " + e.getMessage());
         }
