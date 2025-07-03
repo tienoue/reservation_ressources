@@ -1,16 +1,17 @@
 package vues;
-import controllers.*;
-import util.*;
-import models.*;
+
+import controllers.ResponsableController;
+
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class ResponsableDashboardView extends JFrame {
     private int utilisateurId;
 
-    public ResponsableDashboardView() {
-
+    public ResponsableDashboardView(int utilisateurId) {
+        this.utilisateurId = utilisateurId;
         setTitle("Tableau de bord - Responsable");
         setSize(600, 400);
         setLocationRelativeTo(null);
@@ -24,8 +25,15 @@ public class ResponsableDashboardView extends JFrame {
         JButton btnVoirRessources = new JButton("Voir les ressources disponibles");
         btnVoirRessources.addActionListener(e -> ResponsableController.afficherRessourcesDisponibles());
 
+
+
+        JButton btnModifierInfos = new JButton("Modifier mes infos");
+        btnModifierInfos.addActionListener(e -> ModifierInfoDialog.afficher(utilisateurId));
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(btnVoirRessources);
+
+        buttonPanel.add(btnModifierInfos);
 
         mainPanel.add(welcomeLabel, BorderLayout.NORTH);
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
@@ -33,6 +41,5 @@ public class ResponsableDashboardView extends JFrame {
         add(mainPanel);
         setVisible(true);
     }
-
 
 }

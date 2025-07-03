@@ -7,21 +7,29 @@ import vues.adminPanels.UtilisateurPanel;
 import javax.swing.*;
 import java.awt.*;
 public class AdminDashboardView extends JFrame {
+    private int utilisateurId;
     private JPanel contentPanel;
-    public AdminDashboardView() {
+
+    public AdminDashboardView(int utilisateurId) {
+        this.utilisateurId = utilisateurId;
         setTitle("Admin Dashboard - Gestion de réservation");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 500);
         setLocationRelativeTo(null);
 
         JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new GridLayout(3, 1, 10, 10));
+
+        menuPanel.setLayout(new GridLayout(4, 1, 10, 10));
         JButton utilisateurBtn = new JButton("Utilisateur");
-        JButton salleBtn = new JButton("Salle");
+        JButton salleBtn = new JButton("Salles");
         JButton ressourceBtn = new JButton("Ressources");
+        JButton btnModifierInfos = new JButton("Modifier mes infos");
+
         menuPanel.add(utilisateurBtn);
         menuPanel.add(salleBtn);
         menuPanel.add(ressourceBtn);
+        menuPanel.add(btnModifierInfos);
+
 
         contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(new JLabel("Bienvenue dans le dashboard administrateur", SwingConstants.CENTER), BorderLayout.CENTER);
@@ -33,6 +41,7 @@ public class AdminDashboardView extends JFrame {
         utilisateurBtn.addActionListener(e -> afficherUtilisateurPanel());
         salleBtn.addActionListener(e -> afficherSallePanel());
         ressourceBtn.addActionListener(e -> afficherRessourcePanel());
+        btnModifierInfos.addActionListener(e -> ModifierInfoDialog.afficher(utilisateurId));
 
         setVisible(true);
     }
