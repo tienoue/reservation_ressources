@@ -131,6 +131,7 @@ package vues;
 import javax.swing.*;
 import java.awt.*;
 
+import vues.responsablePanels.AfficherReservations;
 import vues.responsablePanels.AfficherRessourcePanel; // Importer le panel des ressources
 import vues.responsablePanels.CalendrierPanel;
 import vues.responsablePanels.HistoriquePanel;
@@ -164,6 +165,9 @@ public class ResponsableDashboardView extends JFrame {
         JButton calendrierBtn = new JButton("Calendrier");
         JButton ressourcesBtn = new JButton("Afficher Ressources");
 
+        JButton AfficherReservationBtn = new JButton("Afficher reservation");
+
+
         JButton btnModifierInfos = new JButton("Modifier mes infos");
         btnModifierInfos.addActionListener(e -> ModifierInfoDialog.afficher(utilisateurId));
 
@@ -178,6 +182,7 @@ public class ResponsableDashboardView extends JFrame {
         // Ajout des composants au menu
         menuPanel.add(titleLabel);
         menuPanel.add(Box.createVerticalStrut(10));
+        menuPanel.add(AfficherReservationBtn);
         menuPanel.add(ressourcesBtn);
         menuPanel.add(Box.createVerticalStrut(10));
         menuPanel.add(calendrierBtn);
@@ -201,6 +206,7 @@ public class ResponsableDashboardView extends JFrame {
         calendrierPanel = new CalendrierPanel(contentPanel);
 
         // Actions pour afficher les différents panneaux
+        AfficherReservationBtn.addActionListener(e -> afficherReservationPanel());
         historiqueBtn.addActionListener(e -> afficherHistoriquePanel());
         calendrierBtn.addActionListener(e -> afficherCalendrierPanel());
         ressourcesBtn.addActionListener(e -> afficherRessourcesDisponibles()); // Action pour afficher les ressources
@@ -226,6 +232,12 @@ public class ResponsableDashboardView extends JFrame {
     private void afficherRessourcesDisponibles() {
         contentPanel.removeAll();
         contentPanel.add(AfficherRessourcePanel.afficherRessourcesDisponibles(), BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+    private void afficherReservationPanel() {
+        contentPanel.removeAll();
+        contentPanel.add(new AfficherReservations(), BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
