@@ -1,5 +1,7 @@
 package vues;
 
+import vues.responsablePanels.AfficherReservations;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -34,9 +36,9 @@ public class ResponsableDashboardView extends JFrame {
         setVisible(true);
     }
 
-    private void afficherReservationPanel() {
+    private void afficherSallesLibresPanel() {
         contentPanel.removeAll();
-        contentPanel.add(new JLabel("Afficher les reservations ici", SwingConstants.CENTER), BorderLayout.CENTER);
+        contentPanel.add(new JLabel("Afficher les salles libres ici", SwingConstants.CENTER), BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
@@ -48,9 +50,9 @@ public class ResponsableDashboardView extends JFrame {
         contentPanel.repaint();
     }
 
-    private void afficherSallesLibresPanel() {
+    private void afficherReservationPanel() {
         contentPanel.removeAll();
-        contentPanel.add(new JLabel("Afficher Salles Libres ici", SwingConstants.CENTER), BorderLayout.CENTER);
+        contentPanel.add(new AfficherReservations(), BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
